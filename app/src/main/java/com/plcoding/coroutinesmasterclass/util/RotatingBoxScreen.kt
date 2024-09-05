@@ -109,10 +109,13 @@ fun LoadImageAndFindDominantColor(imageUri: Uri?, dominantColor: MutableState<Co
                     .build()
 
                 val result = (loader.execute(request) as SuccessResult).drawable
-                val bitmap = result.toBitmap()
 
-                Palette.from(bitmap).generate { palette ->
-                    dominantColor.value = Color(palette?.getDominantColor(0) ?: 0)
+                withContext(Dispatchers.Default) {
+                    val bitmap = result.toBitmap()
+
+                    Palette.from(bitmap).generate { palette ->
+                        dominantColor.value = Color(palette?.getDominantColor(0) ?: 0)
+                    }
                 }
             }
         }
